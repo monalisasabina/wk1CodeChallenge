@@ -3,64 +3,11 @@
 
 
 
-
 let grossSalary=54500
 
+// --------------------------------------------------------------------------------------------------------------------------------------
+// TO DETERMINE NHIF RATES
 
-
-function payee(tax) {
-    if (grossSalary>0 && grossSalary<24000){
-        return tax=0
-    
-    }else if(grossSalary >= 24000 && grossSalary<32333){ 
-        return tax=2400 + (grossSalary-24000)*0.25
-
-    }else if(grossSalary >=32333 && grossSalary<500000){
-        return tax=2400 + (8333*0.25) + (grossSalary-32333)*0.30
-    
-    }else if(grossSalary>= 500000 && grossSalary<800000){
-        return tax= 2400 + (8333*0.25) + (300000*0.325) +(grossSalary-500000)
-      
-    }else if (grossSalary>=800000){
-        return tax= 2400 + (8333*0.25) + (300000*0.325) +(800000*0.35)+ (grossSalary-800000)
-
-    }
-    
-}
-
-console.log(`The PAYEE rate for ${grossSalary} is: ${payee()}`)
-
-
-
-function nssf(nssfRate){
-    
-    if (grossSalary<2999){
-        return nssfRate=0
-    }
-    if(grossSalary>=3000 && grossSalary<=4499){
-        return nssfRate=300
-
-    }else if(grossSalary>=4500 && grossSalary<=5999){
-        return nssfRate=540
-
-    }else if(grossSalary>=6000 && grossSalary<=9999){
-        return nssfRate=540
-
-    }else if(grossSalary>=10000 && grossSalary<=13999){
-        return nssfRate=1200
-
-    }else if(grossSalary>=14000 && grossSalary<=17999){
-        return nssfRate=1680
-
-    }else if(grossSalary>=18000){
-        return nssfRate=2160
-    }
-    return nssfRate
-} 
-console.log(`The NSSF rate for ${grossSalary} is: ${nssf()}`)
-
-
-    
 
 function nhif(nhifRate){
     if (grossSalary<1000){
@@ -118,8 +65,74 @@ function nhif(nhifRate){
 }
 console.log(`The NHIF rate for ${grossSalary} is: ${nhif()}`)
 
-function netSalary(){
-    return grossSalary -(payee() + nssf() + nhif())
-}
 
-console.log(`Your Net salary is ${netSalary()}`)
+// -------------------------------------------------------------------------------------------------------------------------------------------
+// TO DETERMINE NSSF RATES
+
+function nssf(nssfRate){
+    
+    if (grossSalary<2999){
+        return nssfRate=0
+    }
+    if(grossSalary>=3000 && grossSalary<=4499){
+        return nssfRate=300
+
+    }else if(grossSalary>=4500 && grossSalary<=5999){
+        return nssfRate=540
+
+    }else if(grossSalary>=6000 && grossSalary<=9999){
+        return nssfRate=540
+
+    }else if(grossSalary>=10000 && grossSalary<=13999){
+        return nssfRate=1200
+
+    }else if(grossSalary>=14000 && grossSalary<=17999){
+        return nssfRate=1680
+
+    }else if(grossSalary>=18000){
+        return nssfRate=2160
+    }
+    return nssfRate
+} 
+console.log(`The NSSF rate for ${grossSalary} is: ${nssf()}`)
+
+
+// -------------------------------------------------------------------------------------------------------------------------------------
+// THE PAYEE HAS TO BE MADE AFTER NSSF HAS BEEN ADDUCTED FROM GROSS SALARY. THIS IS BASED ON A PAYSLIP I HAD SEEN.
+
+function salaryAfterNssf(){
+    return grossSalary - nssf()
+}
+console.log(`Your gross salary after NSSF deduction: ${salaryAfterNssf()}`)
+
+
+function payee(salary) {
+    if (salary>0 && salary<24000){
+        return tax=0
+     
+    }else if(salary>= 24000 && salary<32333){ 
+        return tax=2400 + (salary -24000)*0.25
+
+    }else if(salary>=32333 && salaryAfterNssf() <500000){
+        return tax=2400 + (8333*0.25) + (salary -32333)*0.30
+    
+    }else if(salary= 500000 && salary<800000){
+        return tax= 2400 + (8333*0.25) + (300000*0.325) +(salary-500000)
+      
+    }else if (salary>=800000){
+        return tax= 2400 + (8333*0.25) + (300000*0.325) +(800000*0.35)+ (salary-800000)
+
+    }
+
+}
+console.log(`Your PAYEE is: ${payee(salaryAfterNssf())}`)
+
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------------
+// GETTING THE NET SALARY
+
+function netSalary(){
+ return grossSalary -(payee(salaryAfterNssf())+ nhif()+ nssf())
+}
+console.log(`Your NET SALARY is: ${netSalary()}`)
+
